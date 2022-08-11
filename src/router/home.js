@@ -1,16 +1,15 @@
-// Import JWT for API's endpoints authentication
-const JWT = require("jsonwebtoken");
-const express = require("express");
+const { isAuthenticated } = require("../middleware/auth.js")
+const express = require("express")
 
-const router = express.Router();
+const router = express.Router()
 
-router.get("/", (request, response) => {
+router.get("/home", isAuthenticated, async (request, response) => {
     response.json({
-        route: '/',
-        authentication: false
-    })
-});
+        status: "Success",
+        response: "Hello!"
+    }).end()
+})
 
 module.exports = {
     homeRouter: router
-};
+}

@@ -53,8 +53,7 @@ const searchUser = (request, response, next) => {
 };
 
 const viewUser = async(request, response, next) => {
-    const userUsername = request.params.username
-    const userId = request.params.id
+    const {userUsername, userId} = request.params;
 
     try{
         const userData = await UserModel.findOne({
@@ -80,12 +79,8 @@ const viewUser = async(request, response, next) => {
 };
 
 const newUser = async (request, response, next) => {
-    const requestUsername = request.body.username
-    const requestName = request.body.name
-    const requestPassword = request.body.password
+    const {requestUsername, requestName, requestPassword, requestEmail, isAdmin} = request.body
     const hashedPassword = crypto.createHash("sha256").update(requestPassword).digest("hex")
-    const requestEmail = request.body.email
-    const isAdmin = request.body.is_admin
 
     const findUsername = await UserModel.findAll({
         where: {
