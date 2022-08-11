@@ -85,6 +85,7 @@ const newUser = async (request, response, next) => {
     const requestPassword = request.body.password
     const hashedPassword = crypto.createHash("sha256").update(requestPassword).digest("hex")
     const requestEmail = request.body.email
+    const isAdmin = request.body.is_admin
 
     const findUsername = await UserModel.findAll({
         where: {
@@ -115,7 +116,8 @@ const newUser = async (request, response, next) => {
                     username: requestUsername,
                     name: requestName,
                     password: hashedPassword,
-                    email: requestEmail
+                    email: requestEmail,
+                    is_admin: isAdmin
                 })
                 response.json({
                     Status: "success",
