@@ -13,6 +13,9 @@ const isAuthenticated = async (request, response, next) => {
         const verify = await jwt.verify(token, process.env.SECRET_KEY)
 
         const verifiedUser = await UserModel.findOne({
+            attributes: [
+                'username', 'id'
+            ],
             where: {
                 [Op.and]: [{
                     username: verify.username,
@@ -20,6 +23,7 @@ const isAuthenticated = async (request, response, next) => {
                 }]
             }
         })
+
         request.username = verifiedUser.username
         request.id = verifiedUser.id
         next()

@@ -50,10 +50,7 @@ router.post("/login", async (request, response) => {
             expiresIn: process.env.JWT_EXPIRE,
         })
 
-        return response.cookie( "token", token , { httpOnly: true }).json({
-            status: "success",
-            response: "LoggedIn Successfully"
-        })
+        return response.cookie( "token", token , { httpOnly: true }).redirect("/home")
     } catch(error){
         return response.json({
             status: "error",

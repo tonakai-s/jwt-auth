@@ -1,6 +1,6 @@
 const crypto = require("crypto")
 const { UserModel } = require("../models/User.js")
-const { Op } = require("sequelize")
+const { Op, QueryTypes } = require("sequelize")
 
 const searchUser = (request, response, next) => {
     const QuerySearch = request.query.search.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
@@ -72,7 +72,7 @@ const viewUser = async(request, response, next) => {
     }
 };
 
-const newUser = async (request, response) => {
+const registerUser = async (request, response) => {
     const {username, name, password, email, is_admin} = request.body
     const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
 
@@ -122,48 +122,104 @@ const newUser = async (request, response) => {
 
 const deleteUser = async (request, response, next) => {
     const UserId = parseInt(request.params.id)
-
     if(isNaN(UserId)){
-        response.json({
+        return response.json({
             Status: "error",
             Response: "User ID must be a number."
         }).end()
-    } else {
-        const searchUserId = await UserModel.findAll({
+    }
+
+    const searchUserId = await UserModel.findAll({
+        where: {
+            id: UserId
+        }
+    })
+    if(searchUserId.length === 0){
+        return response.json({
+            Status: "error",
+            Response: "This user has not been founded to delete, maybe him not exist."
+        }).end()
+    }
+
+    UserModel.destroy({
+        where: {
+            id: UserId
+        }
+    }).then(destroyResponse => {
+        response.json({
+            Status: "success",
+            Response: destroyResponse
+        }).end()
+    }).catch(error => {
+        response.json({
+            Status: "error",
+            Response: error
+        }).end()
+    })
+}
+
+const updateUser = async(request, response) => {
+    try{
+        const { username, id } = request.params
+        const { name, password, is_admin } = request.body
+        const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
+
+        parseInt(id)
+        if(isNaN(id)){
+            return response.json({
+                Status: "error",
+                Response: "User ID must be a number."
+            }).end()
+        }
+
+        const userToUpdate = await UserModel.findOne({
             where: {
-                id: UserId
+                [Op.and]: [{
+                    username: username,
+                    id: id
+                }]
             }
         })
-    
-        if(searchUserId.length === 0){
-            response.json({
+        if(!userToUpdate){
+            return response.json({
                 Status: "error",
-                Response: "This user has not been founded to delete, maybe him not exist."
-            })
-            response.end()
-        } else {
-            UserModel.destroy({
-                where: {
-                    id: UserId
-                }
-            }).then(destroyResponse => {
-                response.json({
-                    Status: "success",
-                    Response: destroyResponse
-                }).end()
-            }).catch(error => {
-                response.json({
-                    Status: "error",
-                    Response: error
-                }).end()
-            })
+                Response: "The selected user does't exists on the system."
+            }).end()
         }
+
+        if(!password || !name){
+            return response.json({
+                Status: "error",
+                Response: "Name and password fields can't be empty"
+            }).end()
+        }
+
+        await UserModel.update({
+            name: name, password: hashedPassword, is_admin: is_admin
+        }, {
+            where: {
+                [Op.and]: [{
+                    id: id,
+                    username: username
+                }]
+            }
+        })
+        response.json({
+            Status: "success",
+            Response: "User updated successfully"
+        })
+    } catch(error){
+        response.json({
+            Status: "error",
+            Response: error
+        })
     }
 }
 
 module.exports = {
     searchUser,
     viewUser,
-    newUser,
-    deleteUser
+    registerUser,
+    deleteUser,
+    updateUser
 };
