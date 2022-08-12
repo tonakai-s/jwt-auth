@@ -7,48 +7,44 @@ const searchUser = (request, response, next) => {
     if(QuerySearch.length === 0){
         try{
             UserModel.findAll().then(queryResult => {
-                response.json({
+                return response.json({
                     Status: "success",
                     Response: queryResult
-                })
-                response.end()
+                }).end()
             })
         } catch(error){
-            response.json({
+            return response.json({
                 Status: "error",
                 Response: error
-            })
-            response.end()
+            }).end()
         }
-    } else {
-        try{
-            UserModel.findAll({
-                where: {
-                    [Op.or]: [
-                        { username: {
-                                [Op.like]: `%${QuerySearch}%`
-                            }
-                        },
-                        { email: {
-                                [Op.like]: `%${QuerySearch}%`
-                            }
+    }
+
+    try{
+        UserModel.findAll({
+            where: {
+                [Op.or]: [
+                    { username: {
+                            [Op.like]: `%${QuerySearch}%`
                         }
-                    ]
-                }
-            }).then(queryResult => {
-                response.json({
-                    Status: "success",
-                    Response: queryResult
-                })
-                response.end()
-            })
-        } catch(error){
-            response.json({
-                Status: "error",
-                Response: error
-            })
-            response.end()
-        }
+                    },
+                    { email: {
+                            [Op.like]: `%${QuerySearch}%`
+                        }
+                    }
+                ]
+            }
+        }).then(queryResult => {
+            return response.json({
+                Status: "success",
+                Response: queryResult
+            }).end()
+        })
+    } catch(error){
+        return response.json({
+            Status: "error",
+            Response: error
+        }).end()
     }
 };
 
@@ -67,14 +63,12 @@ const viewUser = async(request, response, next) => {
         response.json({
             Status: "success",
             Response: userData
-        })
-        response.end()
+        }).end()
     } catch(error){
         response.json({
             Status: "error",
             Response: error
-        })
-        response.end()
+        }).end()
     }
 };
 
@@ -82,51 +76,48 @@ const newUser = async (request, response) => {
     const {username, name, password, email, is_admin} = request.body
     const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
 
-
     const findUsername = await UserModel.findAll({
         where: {
             username: username
         }
     })
-    
     if(findUsername != 0){
-        response.json({
+        return response.json({
             Status: "error",
             Response: 'Already have a user with this username, please change another!'
         }).end()
-    } else {
-        const findUserEmail = await UserModel.findAll({
-            where: {
-                email: email
-            }
-        })
-    
-        if(findUserEmail != 0){
-            response.json({
-                Status: "error",
-                Response: 'This email is already in use by another user, please change another!'
-            }).end()
-        } else {
-            try {
-                const newUser = await UserModel.create({
-                    username: username,
-                    name: name,
-                    password: hashedPassword,
-                    email: email,
-                    is_admin: is_admin
-                })
-                response.json({
-                    Status: "success",
-                    Response: newUser
-                }).end()
-            } catch(error){
-                response.json({
-                    Status: "error",
-                    Response: error
-                }).end()
-            }            
-        }
     }
+
+    const findUserEmail = await UserModel.findAll({
+        where: {
+            email: email
+        }
+    })
+    if(findUserEmail != 0){
+        return response.json({
+            Status: "error",
+            Response: 'This email is already in use by another user, please change another!'
+        }).end()
+    }
+    
+    try {
+        const newUser = await UserModel.create({
+            username: username,
+            name: name,
+            password: hashedPassword,
+            email: email,
+            is_admin: is_admin
+        })
+        response.json({
+            Status: "success",
+            Response: newUser
+        }).end()
+    } catch(error){
+        response.json({
+            Status: "error",
+            Response: error
+        }).end()
+    }            
 };
 
 const deleteUser = async (request, response, next) => {

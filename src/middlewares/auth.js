@@ -1,6 +1,7 @@
 require("dotenv").config({path: `${__dirname}/../../.env`})
 const { UserModel } = require("../models/User.js")
 const jwt = require("jsonwebtoken")
+const { Op } = require("sequelize")
 
 const isAuthenticated = async (request, response, next) => {
     try {
@@ -10,20 +11,24 @@ const isAuthenticated = async (request, response, next) => {
         }
 
         const verify = await jwt.verify(token, process.env.SECRET_KEY)
-        console.log(JSON.stringify(verify))
-        const verifiedUsername = await UserModel.findOne({
+
+        const verifiedUser = await UserModel.findOne({
             where: {
-                username: verify.username
+                [Op.and]: [{
+                    username: verify.username,
+                    id: verify.id
+                }]
             }
         })
-        request.username = verifiedUsername.username
+        request.username = verifiedUser.username
+        request.id = verifiedUser.id
         next()
     } catch(error){
         switch(error.message){
             case 'invalid token':
                 return next('Invalid Token Informed')
             case 'jwt malformed':
-                return next('This not is a valid token')
+                return next('Please, make login to access the data.')
             default:
                 return next(error)
         }

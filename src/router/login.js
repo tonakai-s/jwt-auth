@@ -46,11 +46,10 @@ router.post("/login", async (request, response) => {
             }).end()
         }
 
-        const token = jwt.sign({ username: userExist.username }, process.env.SECRET_KEY, {
+        const token = jwt.sign({ username: userExist.username, id: userExist.id }, process.env.SECRET_KEY, {
             expiresIn: process.env.JWT_EXPIRE,
         })
 
-        
         return response.cookie( "token", token ).json({
             status: "success",
             response: "LoggedIn Successfully"

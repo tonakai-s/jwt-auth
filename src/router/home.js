@@ -1,4 +1,5 @@
 const { isAuthenticated } = require("../middlewares/auth.js")
+const { isAdmin } = require("../middlewares/admin.js")
 const express = require("express")
 
 const router = express.Router()
