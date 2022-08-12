@@ -26,7 +26,7 @@ const isAuthenticated = async (request, response, next) => {
     } catch(error){
         switch(error.message){
             case 'invalid token':
-                return next('Invalid Token Informed')
+                return next('Invalid Token Informed.')
             case 'jwt malformed':
                 return next('Please, make login to access the data.')
             case 'jwt expired':
