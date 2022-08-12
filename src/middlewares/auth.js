@@ -29,6 +29,8 @@ const isAuthenticated = async (request, response, next) => {
                 return next('Invalid Token Informed')
             case 'jwt malformed':
                 return next('Please, make login to access the data.')
+            case 'jwt expired':
+                return next('Token expired, please make login again.')
             default:
                 return next(error)
         }
