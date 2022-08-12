@@ -1,4 +1,4 @@
-const { isAuthenticated } = require("../middleware/auth.js")
+const { isAuthenticated } = require("../middlewares/auth.js")
 const express = require("express")
 
 const router = express.Router()

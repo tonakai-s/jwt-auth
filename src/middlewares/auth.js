@@ -6,20 +6,27 @@ const isAuthenticated = async (request, response, next) => {
     try {
         const { token } = request.cookies
         if(!token){
-            return next("Please, make login to access the data")
+            return next("Please, make login to access the data.")
         }
 
-        const verify = jwt.verify(token, process.env.SECRET_KEY)
+        const verify = await jwt.verify(token, process.env.SECRET_KEY)
+        console.log(JSON.stringify(verify))
         const verifiedUsername = await UserModel.findOne({
             where: {
                 username: verify.username
             }
         })
         request.username = verifiedUsername.username
-        console.log(request.username)
         next()
     } catch(error){
-        return next(error)
+        switch(error.message){
+            case 'invalid token':
+                return next('Invalid Token Informed')
+            case 'jwt malformed':
+                return next('This not is a valid token')
+            default:
+                return next(error)
+        }
     }
 }
 
