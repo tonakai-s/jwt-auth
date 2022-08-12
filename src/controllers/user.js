@@ -53,14 +53,14 @@ const searchUser = (request, response, next) => {
 };
 
 const viewUser = async(request, response, next) => {
-    const {userUsername, userId} = request.params;
+    const {username, id} = request.params;
 
     try{
         const userData = await UserModel.findOne({
             where: {
                 [Op.and]: [{
-                    username: userUsername,
-                    id: userId
+                    username: username,
+                    id: id
                 }]
             }
         })
@@ -78,13 +78,14 @@ const viewUser = async(request, response, next) => {
     }
 };
 
-const newUser = async (request, response, next) => {
-    const {requestUsername, requestName, requestPassword, requestEmail, isAdmin} = request.body
-    const hashedPassword = crypto.createHash("sha256").update(requestPassword).digest("hex")
+const newUser = async (request, response) => {
+    const {username, name, password, email, is_admin} = request.body
+    const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
+
 
     const findUsername = await UserModel.findAll({
         where: {
-            username: requestUsername
+            username: username
         }
     })
     
@@ -96,7 +97,7 @@ const newUser = async (request, response, next) => {
     } else {
         const findUserEmail = await UserModel.findAll({
             where: {
-                email: requestEmail
+                email: email
             }
         })
     
@@ -108,11 +109,11 @@ const newUser = async (request, response, next) => {
         } else {
             try {
                 const newUser = await UserModel.create({
-                    username: requestUsername,
-                    name: requestName,
+                    username: username,
+                    name: name,
                     password: hashedPassword,
-                    email: requestEmail,
-                    is_admin: isAdmin
+                    email: email,
+                    is_admin: is_admin
                 })
                 response.json({
                     Status: "success",

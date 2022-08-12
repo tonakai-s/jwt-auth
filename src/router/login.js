@@ -4,24 +4,24 @@ const crypto = require("crypto")
 const { UserModel } = require("../models/User.js")
 const { Op } = require("sequelize")
 const jwt = require("jsonwebtoken");
-const { isAuthenticated } = require("../middleware/auth.js");
 
 const router = express.Router();
 
 router.post("/login", async (request, response) => {
     try{
-        const requestUsername = request.body.username
-        const hashedPassword = crypto.createHash("sha256").update(request.body.password).digest("hex")
-        if(!requestUsername || !request.body.password) {
+        const {username, password} = request.body
+        if(!username || !password) {
             return response.json({
                 status: "error",
                 response: "Please enter all the details!"
             }).end()
         }
 
+        const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
+
         const userExist = await UserModel.findOne({
             where: {
-                username: requestUsername
+                username: username
             }
         })
         if(!userExist){
@@ -34,7 +34,7 @@ router.post("/login", async (request, response) => {
         const isPasswordMatched = await UserModel.findOne({
             where: {
                 [Op.and]: [{
-                    username: requestUsername,
+                    username: username,
                     password: hashedPassword
                 }]
             }
@@ -46,16 +46,17 @@ router.post("/login", async (request, response) => {
             }).end()
         }
 
-        const token = jwt.sign({ id: userExist.id }, process.env.SECRET_KEY, {
+        const token = jwt.sign({ username: userExist.username }, process.env.SECRET_KEY, {
             expiresIn: process.env.JWT_EXPIRE,
         })
+        console.log(userExist.username)
+        console.log("Chegou aqui!")
 
         console.log(`Generated token: ${token}`)
-
-        return response.cookie({ "token": token }).json({
+        return response.cookie({ "token": "teste" }).json({
             status: "success",
-            redirect: "/home"
-        }).end()
+            response: "LoggedIn Successfully"
+        })
     } catch(error){
         return response.json({
             status: "error",
