@@ -1,6 +1,6 @@
 const crypto = require("crypto")
 const { UserModel } = require("../models/User.js")
-const { Op, QueryTypes } = require("sequelize")
+const { Op } = require('sequelize')
 
 const searchUser = (request, response, next) => {
     const QuerySearch = request.query.search.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
@@ -164,6 +164,7 @@ const updateUser = async(request, response) => {
         const { name, password, is_admin } = request.body
         const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
 
+        console.log(username, id)
         parseInt(id)
         if(isNaN(id)){
             return response.json({
@@ -172,7 +173,7 @@ const updateUser = async(request, response) => {
             }).end()
         }
 
-        const userToUpdate = await UserModel.findOne({
+        const userToUpdate = await UserModel.findAll({
             where: {
                 [Op.and]: [{
                     username: username,
@@ -180,6 +181,7 @@ const updateUser = async(request, response) => {
                 }]
             }
         })
+
         if(!userToUpdate){
             return response.json({
                 Status: "error",
@@ -209,6 +211,7 @@ const updateUser = async(request, response) => {
             Response: "User updated successfully"
         })
     } catch(error){
+        console.log(error)
         response.json({
             Status: "error",
             Response: error

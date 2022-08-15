@@ -6,7 +6,7 @@ const isAdmin = async (request, response, next) => {
 
     const user = await UserModel.findOne({
         attributes: [
-            'username', 'id'
+            'username', 'id', 'is_admin'
         ],
         where: {
             [Op.and]: [{

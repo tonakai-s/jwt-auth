@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.get("/search-user", isAuthenticated, UserController.searchUser)
 router.get("/view-user/:username/:id", isAuthenticated, UserController.viewUser)
-router.post("/register-user", isAuthenticated, isAdmin, UserController.registerUser)
+router.post("/register-user", isAuthenticated, UserController.registerUser)
 router.delete("/delete-user/:id", isAuthenticated, isAdmin, UserController.deleteUser)
 router.put("/update-user/:username/:id", isAuthenticated, isAdmin, UserController.updateUser)
 
