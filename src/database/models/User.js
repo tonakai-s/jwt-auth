@@ -1,9 +1,10 @@
-const db = require("../database/connection.js");
+const db = require("../connection.js");
 
 const User = db.sequelize.define("users", {
     username: {
         type: db.Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     name: {
         type: db.Sequelize.STRING,
@@ -15,7 +16,8 @@ const User = db.sequelize.define("users", {
     },
     email: {
         type: db.Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     is_admin: {
         type: db.Sequelize.BOOLEAN,
