@@ -1,4 +1,4 @@
-const db = require("../connection.js");
+const db = require("../database/connection.js")
 
 const User = db.sequelize.define("users", {
     username: {
@@ -24,7 +24,7 @@ const User = db.sequelize.define("users", {
         allowNull: false,
         defaultValue: false
     }
-});
+})
 
 module.exports = {
     UserModel: User
