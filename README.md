@@ -10,6 +10,6 @@ Modules used:
 * Sequelize => ORM to map and manipulate the database
 * Nodemon => Hot reload for fast development time
 
-I used PostgreSQL to this Project! [Postgres logo](url"https://w7.pngwing.com/pngs/582/361/png-transparent-postgre-sql-logo-postgresql-relational-database-management-system-object-relational-database-database-blue-text-logo.png")
+I used PostgreSQL Database to this Project!
 
 Thanks for looking!
