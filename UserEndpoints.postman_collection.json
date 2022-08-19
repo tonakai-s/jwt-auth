@@ -1,0 +1,278 @@
+{
+	"info": {
+		"_postman_id": "556f24d1-ee29-4044-b247-1034eb311394",
+		"name": "UserEndpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19437836"
+	},
+	"item": [
+		{
+			"name": "Search Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/user/search-user?search=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"search-user"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/user/delete-user/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"delete-user",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "rschuquelUpdate",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Renan Dorneles Schuquel",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "mynewstrongpassword",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "rdorneles67@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "is_admin",
+							"value": "false",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/register-user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"register-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View One User Information",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/user/view-user/rschuquel/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"view-user",
+						"rschuquel",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HomePage",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:3000/home",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"home"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginRouteUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "rschuquel",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "mystrongpassword",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "rschuquel4",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginRouteAdmin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "rschuquelAdmin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "mystrongpassword",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateUser",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "rschuquelNovo",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "myneweststrongpassword",
+							"type": "text"
+						},
+						{
+							"key": "is_admin",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/update-user/rschuquelUpdate/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"update-user",
+						"rschuquelUpdate",
+						"6"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
